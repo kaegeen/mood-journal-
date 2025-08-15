@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mood Journal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
+  <h1 class="text-2xl font-bold mb-4">Mood Journal</h1>
+
+  <!-- Mood Selector -->
+  <div class="flex gap-4 mb-6">
+    <button data-mood="😊" class="text-3xl hover:scale-125 transition">😊</button>
+    <button data-mood="😔" class="text-3xl hover:scale-125 transition">😔</button>
+    <button data-mood="😡" class="text-3xl hover:scale-125 transition">😡</button>
+    <button data-mood="😴" class="text-3xl hover:scale-125 transition">😴</button>
+    <button data-mood="🤩" class="text-3xl hover:scale-125 transition">🤩</button>
+  </div>
+
+  <!-- History -->
+  <h2 class="text-lg font-semibold mb-2">History</h2>
+  <div id="history" class="grid grid-cols-7 gap-2 w-full max-w-lg"></div>
+
+  <script>
+    const historyEl = document.getElementById("history");
+    const buttons = document.querySelectorAll("[data-mood]");
+
+    // Load history from localStorage
+    let moodHistory = JSON.parse(localStorage.getItem("moodHistory")) || [];
+
+    function renderHistory() {
+      historyEl.innerHTML = "";
+      moodHistory.forEach(mood => {
+        const div = document.createElement("div");
+        div.textContent = mood;
+        div.className = "text-2xl text-center";
+        historyEl.appendChild(div);
+      });
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        moodHistory.push(btn.dataset.mood);
+        localStorage.setItem("moodHistory", JSON.stringify(moodHistory));
+        renderHistory();
+      });
+    });
+
+    renderHistory();
+  </script>
+</body>
+</html>
